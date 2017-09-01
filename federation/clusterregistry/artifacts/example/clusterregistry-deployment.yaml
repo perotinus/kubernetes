@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: clusterregistry
+  namespace: clusterregistry
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        apiserver: "true"
+    spec:
+      serviceAccountName: apiserver
+      containers:
+      - name: clusterregistry
+        image: gcr.io/kubetest-157500/clusterregistry:latest
+        args:
+        - "--etcd-servers=http://localhost:2379 --authentication-skip-lookup=true -v=8"
+      - name: etcd
+        image: quay.io/coreos/etcd:v3.0.17
